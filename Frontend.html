@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Database CRUD</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Game Database</h1>
+
+    <div id="messageBox" class="message"></div>
+
+    <div id="formCard" class="form-card">
+      <h2 class="form-title" id="formTitle">Add Game</h2>
+
+      <form id="gameForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="id">ID</label>
+            <input type="number" id="id" name="id" placeholder="Enter game ID" required />
+          </div>
+
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter game name" required />
+          </div>
+
+          <div class="form-group">
+            <label for="genre">Genre</label>
+            <input type="text" id="genre" name="genre" placeholder="Enter genre" required />
+          </div>
+
+          <div class="form-group">
+            <label for="year_released">Year Released</label>
+            <input
+              type="number"
+              id="year_released"
+              name="year_released"
+              placeholder="Enter release year"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="developer">Developer</label>
+            <input
+              type="text"
+              id="developer"
+              name="developer"
+              placeholder="Enter developer"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="platforms">Platforms</label>
+            <input
+              type="text"
+              id="platforms"
+              name="platforms"
+              placeholder="e.g. PC, PS5, Switch"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-save" id="submitBtn">Save Game</button>
+          <button type="button" class="btn-cancel" id="cancelBtn">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="table-toolbar">
+      <div class="toolbar-left">
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder="Search by ID, name, genre, developer, platform, year..."
+        />
+      </div>
+
+      <div class="toolbar-right">
+        <button class="btn-add" id="showAddFormBtn">Add Game</button>
+        <button class="btn-refresh" id="refreshBtn">Refresh</button>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Genre</th>
+            <th>Year Released</th>
+            <th>Developer</th>
+            <th>Platforms</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="gamesTableBody">
+          <tr>
+            <td colspan="7" class="empty-state">Loading games...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="footer-note">
+      Refresh reloads the game list from the backend. Search filters the currently loaded list.
+    </p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
