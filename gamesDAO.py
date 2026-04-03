@@ -1,5 +1,5 @@
 # This is the DAO that will connect with the MYSQL Database
-# Copied the format mainly0 from the DAO by Andrew Beatty.
+# Copied the format mainly from the DAO by Andrew Beatty.
 # Author: Loic Bagnoud
 
 import mysql.connector
@@ -62,13 +62,14 @@ class GamesDAO:
 
     def create(self, game):
         cursor = self.getcursor()
-        sql = "insert into games (name, genre, year_released, developer, platforms) values (%s, %s, %s, %s, %s)"
+        sql = "insert into games (name, genre, year_released, developer, platforms, boxcover_url) values (%s, %s, %s, %s, %s, %s)"
         values = (
             game.get("name"),
             game.get("genre"),
             game.get("year_released"),
             game.get("developer"),
-            game.get("platforms")
+            game.get("platforms"),
+            game.get("boxcover_url")
         )
         cursor.execute(sql, values)
 
@@ -80,13 +81,14 @@ class GamesDAO:
 
     def update(self, id, game):
         cursor = self.getcursor()
-        sql = "update games set name = %s, genre = %s, year_released = %s, developer = %s, platforms = %s where id = %s"
+        sql = "update games set name = %s, genre = %s, year_released = %s, developer = %s, platforms = %s, boxcover_url = %s where id = %s, "
         values = (
             game.get("name"),
             game.get("genre"),
             game.get("year_released"),
             game.get("developer"),
             game.get("platforms"),
+            game.get("boxcover_url"),
             id
         )
         cursor.execute(sql, values)
@@ -105,7 +107,7 @@ class GamesDAO:
         print("delete done")
 
     def convertToDictionary(self, resultLine):
-        attkeys = ['id', 'name', 'genre', 'year_released', 'developer', 'platforms']
+        attkeys = ['id', 'name', 'genre', 'year_released', 'developer', 'platforms','boxcover_url']
         game = {}
         currentkey = 0
         for attrib in resultLine:

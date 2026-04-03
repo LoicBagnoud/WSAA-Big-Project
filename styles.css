@@ -119,13 +119,13 @@ button:hover {
 
 .btn-edit {
   background: #6b7280;
-  color: white;
+  color: #ffffff;
   margin-right: 6px;
 }
 
 .btn-delete {
   background: #ef4444;
-  color: white;
+  color: #ffffff;
 }
 
 .message {
@@ -226,13 +226,13 @@ table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  min-width: 1250px;
+  min-width: 1380px;
   table-layout: fixed;
 }
 
 thead {
   background: #0f172a;
-  color: white;
+  color: #ffffff;
 }
 
 th,
@@ -245,32 +245,32 @@ td {
 
 th:nth-child(1),
 td:nth-child(1) {
-  width: 320px;
+  width: 290px;
 }
 
 th:nth-child(2),
 td:nth-child(2) {
-  width: 180px;
+  width: 170px;
 }
 
 th:nth-child(3),
 td:nth-child(3) {
-  width: 150px;
+  width: 140px;
 }
 
 th:nth-child(4),
 td:nth-child(4) {
-  width: 240px;
+  width: 210px;
 }
 
 th:nth-child(5),
 td:nth-child(5) {
-  width: 260px;
+  width: 220px;
 }
 
 th:nth-child(6),
 td:nth-child(6) {
-  width: 180px;
+  width: 170px;
 }
 
 th:nth-child(7),
@@ -306,15 +306,31 @@ tbody tr.game-row.fading-in {
   transform: translateY(0);
 }
 
-.actions-cell {
-  white-space: nowrap;
-}
-
 .name-cell {
   white-space: normal;
   word-break: break-word;
   line-height: 1.35;
   font-weight: 600;
+}
+
+.box-art-cell {
+  text-align: center;
+}
+
+.box-art-image {
+  width: 120px;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #374151;
+  background: #0f172a;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
+}
+
+.actions-cell {
+  white-space: nowrap;
 }
 
 .empty-state {

@@ -22,7 +22,7 @@ def find_by_id(id):
 
     return jsonify(found_game)
 
-# Create a new game 
+# Create a new game
 @app.route('/games', methods=['POST'])
 def create_game():
     if not request.json:
@@ -33,7 +33,8 @@ def create_game():
         "genre": request.json.get("genre"),
         "year_released": request.json.get("year_released"),
         "developer": request.json.get("developer"),
-        "platforms": request.json.get("platforms")
+        "platforms": request.json.get("platforms"),
+        "boxcover_url": "/images/not-found.png"
     }
 
     created_game = gamesDAO.create(game)
@@ -55,7 +56,8 @@ def update_game(id):
         "genre": request.json.get("genre"),
         "year_released": request.json.get("year_released"),
         "developer": request.json.get("developer"),
-        "platforms": request.json.get("platforms")
+        "platforms": request.json.get("platforms"),
+        "boxcover_url": request.json.get("boxcover_url", found_game.get("boxcover_url"))
     }
 
     gamesDAO.update(id, updated_game)

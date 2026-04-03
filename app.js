@@ -3,6 +3,7 @@
 
 const API_BASE_URL = "http://127.0.0.1:5000";
 const GAMES_URL = `${API_BASE_URL}/games`;
+const DEFAULT_BOX_ART = "images/not-found.png";
 
 let allGames = [];
 let isEditMode = false;
@@ -102,9 +103,14 @@ function gameMatchesSearch(game, normalizedSearch) {
 function renderEmptyState(message) {
   $gamesTableBody.html(`
     <tr>
-      <td colspan="6" class="empty-state">${message}</td>
+      <td colspan="7" class="empty-state">${message}</td>
     </tr>
   `);
+}
+
+function getBoxArtUrl(game) {
+  const rawUrl = String(game.boxcover_url ?? "").trim();
+  return rawUrl ? rawUrl : DEFAULT_BOX_ART;
 }
 
 function renderGames(games) {
@@ -113,19 +119,31 @@ function renderGames(games) {
     return;
   }
 
-  const rowsHtml = games.map((game) => `
-    <tr class="game-row fading-in" data-id="${Number(game.id)}">
-      <td class="name-cell">${escapeHtml(game.name ?? "")}</td>
-      <td>${escapeHtml(game.genre ?? "")}</td>
-      <td>${escapeHtml(game.year_released ?? "")}</td>
-      <td>${escapeHtml(game.developer ?? "")}</td>
-      <td>${escapeHtml(game.platforms ?? "")}</td>
-      <td class="actions-cell">
-        <button class="btn-edit" onclick="startEdit(${Number(game.id)})">Update</button>
-        <button class="btn-delete" onclick="deleteGame(${Number(game.id)})">Delete</button>
-      </td>
-    </tr>
-  `).join("");
+  const rowsHtml = games.map((game) => {
+    const imageSrc = getBoxArtUrl(game);
+
+    return `
+      <tr class="game-row fading-in" data-id="${Number(game.id)}">
+        <td class="name-cell">${escapeHtml(game.name ?? "")}</td>
+        <td>${escapeHtml(game.genre ?? "")}</td>
+        <td>${escapeHtml(game.year_released ?? "")}</td>
+        <td>${escapeHtml(game.developer ?? "")}</td>
+        <td>${escapeHtml(game.platforms ?? "")}</td>
+        <td class="box-art-cell">
+          <img
+            class="box-art-image"
+            src="${escapeHtml(imageSrc)}"
+            alt="${escapeHtml(game.name ?? "Game")} box cover"
+            onerror="this.onerror=null; this.src='images/not-found.png';"
+          />
+        </td>
+        <td class="actions-cell">
+          <button class="btn-edit" onclick="startEdit(${Number(game.id)})">Update</button>
+          <button class="btn-delete" onclick="deleteGame(${Number(game.id)})">Delete</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
 
   $gamesTableBody.html(rowsHtml);
 }

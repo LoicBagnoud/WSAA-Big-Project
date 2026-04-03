@@ -8,5 +8,5 @@ Iterations
 
 
 References
-https://rawg.io/
-
+https://rawg.io/ - Styling inspiration
+https://thegamesdb.net/ - API for box art and the likes
