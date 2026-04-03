@@ -1,3 +1,5 @@
+<!-- This would be the Frontend page.-->
+ <!-- Author: ChatGPT - References Below-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,11 +19,6 @@
 
       <form id="gameForm">
         <div class="form-grid">
-          <div class="form-group">
-            <label for="id">ID</label>
-            <input type="number" id="id" name="id" placeholder="Enter game ID" required />
-          </div>
-
           <div class="form-group">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" placeholder="Enter game name" required />
@@ -111,10 +108,14 @@
     </div>
 
     <p class="footer-note">
-      Refresh reloads the game list from the backend. Search filters the currently loaded list.
+      Refresh reloads the latest list from Flask. Search filters the currently loaded records.
     </p>
   </div>
 
-  <script src="script.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
+
+<!-- References:->
+<!-- ChatGPT - https://chatgpt.com/share/69cfc0bc-c5ec-8384-9482-04af249039a8-->

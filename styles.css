@@ -1,3 +1,6 @@
+/* This is the CSS file
+Author: ChatGPT - References below*/
+
 * {
   box-sizing: border-box;
 }
@@ -246,3 +249,7 @@ tbody tr:hover {
     min-width: 100%;
   }
 }
+
+
+/* References:
+-- ChatGPT - https://chatgpt.com/share/69cfc0bc-c5ec-8384-9482-04af249039a8 */
