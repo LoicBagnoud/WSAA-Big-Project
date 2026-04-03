@@ -1,11 +1,13 @@
 // This is the Javascript functions that allow the page to behave the way it does
 // Author: ChatGPT - Reference below
+
 const API_BASE_URL = "http://127.0.0.1:5000";
 const GAMES_URL = `${API_BASE_URL}/games`;
 
 let allGames = [];
 let isEditMode = false;
 let editingGameId = null;
+let currentSearchTerm = "";
 
 const $gamesTableBody = $("#gamesTableBody");
 const $messageBox = $("#messageBox");
@@ -93,24 +95,27 @@ function escapeHtml(value) {
     .replace(/'/g, "&#039;");
 }
 
+function gameMatchesSearch(game, normalizedSearch) {
+  return String(game.name ?? "").toLowerCase().startsWith(normalizedSearch);
+}
+
+function renderEmptyState(message) {
+  $gamesTableBody.html(`
+    <tr>
+      <td colspan="6" class="empty-state">${message}</td>
+    </tr>
+  `);
+}
+
 function renderGames(games) {
   if (!Array.isArray(games) || games.length === 0) {
-    const searchText = $searchInput.val().trim();
-
-    $gamesTableBody.html(`
-      <tr>
-        <td colspan="7" class="empty-state">
-          ${searchText ? "No matching games found." : "No games found."}
-        </td>
-      </tr>
-    `);
+    renderEmptyState("No games found.");
     return;
   }
 
   const rowsHtml = games.map((game) => `
-    <tr>
-      <td>${escapeHtml(game.id ?? "")}</td>
-      <td>${escapeHtml(game.name ?? "")}</td>
+    <tr class="game-row fading-in" data-id="${Number(game.id)}">
+      <td class="name-cell">${escapeHtml(game.name ?? "")}</td>
       <td>${escapeHtml(game.genre ?? "")}</td>
       <td>${escapeHtml(game.year_released ?? "")}</td>
       <td>${escapeHtml(game.developer ?? "")}</td>
@@ -125,26 +130,64 @@ function renderGames(games) {
   $gamesTableBody.html(rowsHtml);
 }
 
-function filterGames(searchTerm) {
-  const normalizedSearch = searchTerm.trim().toLowerCase();
+function applyFilter(searchTerm) {
+  currentSearchTerm = searchTerm.trim().toLowerCase();
 
-  if (!normalizedSearch) {
-    renderGames(allGames);
+  if (!allGames.length) {
+    renderEmptyState("No games found.");
     return;
   }
 
-  const filteredGames = allGames.filter((game) => {
-    return [
-      String(game.id ?? ""),
-      String(game.name ?? ""),
-      String(game.genre ?? ""),
-      String(game.year_released ?? ""),
-      String(game.developer ?? ""),
-      String(game.platforms ?? "")
-    ].some((field) => field.toLowerCase().includes(normalizedSearch));
-  });
+  const filteredGames = currentSearchTerm
+    ? allGames.filter((game) => gameMatchesSearch(game, currentSearchTerm))
+    : allGames;
 
-  renderGames(filteredGames);
+  const visibleIds = new Set(filteredGames.map((game) => Number(game.id)));
+  const $rows = $gamesTableBody.find("tr.game-row");
+
+  if (!currentSearchTerm) {
+    if ($rows.length !== allGames.length) {
+      renderGames(allGames);
+      return;
+    }
+
+    $rows.show().removeClass("fading-out").addClass("fading-in");
+    return;
+  }
+
+  if (filteredGames.length === 0) {
+    $rows.addClass("fading-out");
+
+    setTimeout(() => {
+      renderEmptyState("No matching games found.");
+    }, 300);
+    return;
+  }
+
+  if ($rows.length === 0 || $rows.length !== allGames.length) {
+    renderGames(allGames);
+  }
+
+  const $allRows = $gamesTableBody.find("tr.game-row");
+
+  $allRows.each(function () {
+    const $row = $(this);
+    const rowId = Number($row.data("id"));
+    const isVisible = visibleIds.has(rowId);
+
+    if (isVisible) {
+      $row.stop(true, true).show();
+      $row.removeClass("fading-out").addClass("fading-in");
+    } else {
+      $row.removeClass("fading-in").addClass("fading-out");
+
+      setTimeout(() => {
+        if (!visibleIds.has(rowId) && currentSearchTerm === searchTerm.trim().toLowerCase()) {
+          $row.hide();
+        }
+      }, 300);
+    }
+  });
 }
 
 function fetchGames() {
@@ -162,17 +205,12 @@ function fetchGames() {
     dataType: "json",
     success: function (games) {
       allGames = Array.isArray(games) ? games : [];
-      filterGames($searchInput.val());
+      renderGames(allGames);
+      applyFilter($searchInput.val());
     },
     error: function (xhr, status, error) {
       console.error("Error fetching games:", status, error, xhr.responseText);
-
-      $gamesTableBody.html(`
-        <tr>
-          <td colspan="7" class="empty-state">Could not load games.</td>
-        </tr>
-      `);
-
+      renderEmptyState("Could not load games.");
       showMessage("Error loading games.", "error");
     }
   });
@@ -192,12 +230,10 @@ function createGame(game) {
     },
     error: function (xhr, status, error) {
       console.error("Create error:", status, error, xhr.responseText);
-
       const message =
         xhr.responseJSON?.message ||
         xhr.responseText ||
         "Failed to create game.";
-
       showMessage(message, "error");
     }
   });
@@ -217,12 +253,10 @@ function updateGame(id, game) {
     },
     error: function (xhr, status, error) {
       console.error("Update error:", status, error, xhr.responseText);
-
       const message =
         xhr.responseJSON?.message ||
         xhr.responseText ||
         "Failed to update game.";
-
       showMessage(message, "error");
     }
   });
@@ -246,12 +280,10 @@ function deleteGame(id) {
     },
     error: function (xhr, status, error) {
       console.error("Delete error:", status, error, xhr.responseText);
-
       const message =
         xhr.responseJSON?.message ||
         xhr.responseText ||
         "Failed to delete game.";
-
       showMessage(message, "error");
     }
   });
@@ -267,22 +299,18 @@ function startEdit(id) {
     success: function (game) {
       isEditMode = true;
       editingGameId = Number(id);
-
       $formTitle.text("Update Game");
       $submitBtn.text("Update Game");
       populateForm(game);
       showForm();
-
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
     error: function (xhr, status, error) {
       console.error("Edit load error:", status, error, xhr.responseText);
-
       const message =
         xhr.responseJSON?.message ||
         xhr.responseText ||
         "Could not load game for editing.";
-
       showMessage(message, "error");
     }
   });
@@ -324,7 +352,7 @@ $refreshBtn.on("click", function () {
 });
 
 $searchInput.on("input", function () {
-  filterGames($(this).val());
+  applyFilter($(this).val());
 });
 
 window.startEdit = startEdit;

@@ -1,16 +1,17 @@
 <!-- This would be the Frontend page.-->
  <!-- Author: ChatGPT - References Below-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Game Database CRUD</title>
+  <title>WSAA - Game Database</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="container">
-    <h1>Game Database</h1>
+    <h1 class="page-title">WSAA - Game Database</h1>
 
     <div id="messageBox" class="message"></div>
 
@@ -76,7 +77,7 @@
           type="text"
           id="searchInput"
           class="search-input"
-          placeholder="Search by ID, name, genre, developer, platform, year..."
+          placeholder="Search by game name..."
         />
       </div>
 
@@ -90,7 +91,6 @@
       <table>
         <thead>
           <tr>
-            <th>ID</th>
             <th>Name</th>
             <th>Genre</th>
             <th>Year Released</th>
@@ -108,7 +108,8 @@
     </div>
 
     <p class="footer-note">
-      Refresh reloads the latest list from Flask. Search filters the currently loaded records.
+      Refresh reloads the latest list from the server. <br>
+      Search filters the currently loaded records.
     </p>
   </div>
 
