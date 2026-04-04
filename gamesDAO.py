@@ -81,7 +81,7 @@ class GamesDAO:
 
     def update(self, id, game):
         cursor = self.getcursor()
-        sql = "update games set name = %s, genre = %s, year_released = %s, developer = %s, platforms = %s, boxcover_url = %s where id = %s, "
+        sql = "update games set name = %s, genre = %s, year_released = %s, developer = %s, platforms = %s, boxcover_url = %s where id = %s "
         values = (
             game.get("name"),
             game.get("genre"),

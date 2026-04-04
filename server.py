@@ -58,6 +58,43 @@ def find_best_game_match(game_name, year_released=None):
     #return first candidate if no year match
     return candidates[0]
 
+# This is for the boxart
+def find_boxcover_for_game(game_name, year_released=None):
+    try:
+        best_match = find_best_game_match(game_name, year_released)
+
+        if best_match is None:
+            return "/images/not-found.png"
+
+        game_id = best_match.get("id")
+
+        if not game_id:
+            return "/images/not-found.png"
+
+        url = "https://api.thegamesdb.net/v1/Games/Images"
+        params = {
+            "apikey": apikey,
+            "games_id": game_id
+        }
+
+        response = requests.get(url, params=params)
+        data = response.json()
+
+        base_url = data.get("data", {}).get("base_url", {}).get("medium", "")
+        images = data.get("data", {}).get("images", {}).get(str(game_id), [])
+
+        for image in images:
+            if image.get("type") == "boxart" and image.get("side") == "front":
+                filename = image.get("filename")
+                if filename:
+                    return base_url + filename
+
+    except Exception as e:
+        print("Error finding box cover:", e)
+
+    return "/images/not-found.png"
+
+
 # Get all games
 @app.route('/games', methods=['GET'])
 def get_all_games():
@@ -77,20 +114,36 @@ def find_by_id(id):
 # Create a new game
 @app.route('/games', methods=['POST'])
 def create_game():
-    if not request.json:
-        return jsonify({"message": "Invalid or missing JSON body"}), 400
+    try:
+        if not request.json:
+            return jsonify({"message": "Invalid or missing JSON body"}), 400
 
-    game = {
-        "name": request.json.get("name"),
-        "genre": request.json.get("genre"),
-        "year_released": request.json.get("year_released"),
-        "developer": request.json.get("developer"),
-        "platforms": request.json.get("platforms"),
-        "boxcover_url": "/images/not-found.png"
-    }
+        print("Incoming JSON:", request.json)
 
-    created_game = gamesDAO.create(game)
-    return jsonify(created_game), 201
+        cover_url = find_boxcover_for_game(
+            request.json.get("name"),
+            request.json.get("year_released")
+        )
+        print("Cover URL:", cover_url)
+
+        game = {
+            "name": request.json.get("name"),
+            "genre": request.json.get("genre"),
+            "year_released": request.json.get("year_released"),
+            "developer": request.json.get("developer"),
+            "platforms": request.json.get("platforms"),
+            "boxcover_url": cover_url
+        }
+        print("Game to save:", game)
+
+        created_game = gamesDAO.create(game)
+        print("Created game:", created_game)
+
+        return jsonify(created_game), 201
+
+    except Exception as e:
+        print("POST /games error:", e)
+        return jsonify({"message": str(e)}), 500
 
 # Update an existing game
 @app.route('/games/<int:id>', methods=['PUT'])
@@ -127,21 +180,6 @@ def delete_game(id):
 
     gamesDAO.delete(id)
     return jsonify({"message": "Game deleted successfully"})
-
-
-
-# Testing
-@app.route('/testmatch/<name>/<int:year>')
-def test_match(name, year):
-    match = find_best_game_match(name, year)
-    if match is None:
-        return jsonify({"message": "No match found"}), 404
-    return jsonify(match)
-
-
-
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
