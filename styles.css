@@ -9,19 +9,35 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 24px;
-  background: linear-gradient(180deg, #6b7280 0%, #4b5563 100%);
+  background-image: url("images/background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   color: #f3f4f6;
   min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.18);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .container {
   max-width: 1450px;
   margin: 0 auto;
-  background: #1f2937;
+  background: rgba(31, 41, 55, 0.92);
   padding: 28px;
   border-radius: 18px;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
   border: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+  z-index: 1;
 }
 
 .page-title {
@@ -151,7 +167,7 @@ button:hover {
 }
 
 .form-card {
-  background: #111827;
+  background: rgba(17, 24, 39, 0.92);
   border: 1px solid #374151;
   padding: 20px;
   border-radius: 16px;
@@ -212,7 +228,7 @@ input:focus {
 input[type="number"] {
   appearance: textfield;
   -moz-appearance: textfield;
-  padding-right: 52px;
+  padding-right: 42px;
 }
 
 input[type="number"]::-webkit-outer-spin-button,
@@ -244,7 +260,7 @@ input[type="number"]::-webkit-inner-spin-button {
   color: #ffffff;
   border-radius: 5px;
   padding: 0;
-  font-size: 8px;
+  font-size: 9px;
   line-height: 1;
   display: flex;
   align-items: center;
@@ -272,7 +288,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .table-wrapper {
   overflow-x: auto;
-  background: #111827;
+  background: rgba(17, 24, 39, 0.88);
   border: 1px solid #374151;
   border-radius: 16px;
 }
