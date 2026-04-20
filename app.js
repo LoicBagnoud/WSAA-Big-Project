@@ -20,6 +20,9 @@ const $showAddFormBtn = $("#showAddFormBtn");
 const $cancelBtn = $("#cancelBtn");
 const $refreshBtn = $("#refreshBtn");
 const $searchInput = $("#searchInput");
+const $yearReleasedInput = $("#year_released");
+const $yearIncreaseBtn = $("#yearIncreaseBtn");
+const $yearDecreaseBtn = $("#yearDecreaseBtn");
 
 function showMessage(text, type = "success") {
   $messageBox.text(text).removeClass("success error").addClass(type);
@@ -87,6 +90,12 @@ function validateGameData(game) {
   return null;
 }
 
+function changeYearValue(delta) {
+  const currentValue = Number($yearReleasedInput.val()) || 0;
+  $yearReleasedInput.val(currentValue + delta);
+  $yearReleasedInput.trigger("input");
+}
+
 function escapeHtml(value) {
   return String(value)
     .replace(/&/g, "&amp;")
@@ -136,6 +145,7 @@ function renderGames(games) {
             alt="${escapeHtml(game.name ?? "Game")} box cover"
             onerror="this.onerror=null; this.src='images/not-found.png';"
           />
+          ${game.warning ? `<div class="box-art-warning">Image not found</div>` : ""}
         </td>
         <td class="actions-cell">
           <button class="btn-edit" onclick="startEdit(${Number(game.id)})">Update</button>
@@ -234,14 +244,52 @@ function fetchGames() {
   });
 }
 
+function rollbackCreatedGame(createdGameId) {
+  $.ajax({
+    url: `${GAMES_URL}/${createdGameId}`,
+    method: "DELETE",
+    success: function () {
+      showMessage("Game creation cancelled because no image was found.", "error");
+      resetForm();
+      hideForm();
+      fetchGames();
+    },
+    error: function (xhr, status, error) {
+      console.error("Rollback delete error:", status, error, xhr.responseText);
+      showMessage(
+        "Game was created, but automatic removal after warning failed.",
+        "error"
+      );
+      resetForm();
+      hideForm();
+      fetchGames();
+    }
+  });
+}
+
 function createGame(game) {
   $.ajax({
     url: GAMES_URL,
     method: "POST",
     contentType: "application/json",
     data: JSON.stringify(game),
-    success: function () {
-      showMessage("Game created successfully.", "success");
+    dataType: "json",
+    success: function (createdGame) {
+      if (createdGame.warning) {
+        const keepEntry = window.confirm(
+          `${createdGame.warning}\n\nDo you want to keep this game entry?`
+        );
+
+        if (!keepEntry) {
+          rollbackCreatedGame(createdGame.id);
+          return;
+        }
+
+        showMessage(createdGame.warning, "error");
+      } else {
+        showMessage("Game created successfully.", "success");
+      }
+
       resetForm();
       hideForm();
       fetchGames();
@@ -263,8 +311,27 @@ function updateGame(id, game) {
     method: "PUT",
     contentType: "application/json",
     data: JSON.stringify(game),
-    success: function () {
-      showMessage(`Game with ID ${id} updated successfully.`, "success");
+    dataType: "json",
+    success: function (updatedGame) {
+      if (updatedGame.warning) {
+        const keepChanges = window.confirm(
+          `${updatedGame.warning}\n\nDo you want to keep these changes?`
+        );
+
+        if (!keepChanges) {
+          showMessage(
+            "Update saved, but you should correct the game title and update it again.",
+            "error"
+          );
+          fetchGames();
+          return;
+        }
+
+        showMessage(updatedGame.warning, "error");
+      } else {
+        showMessage("Game updated successfully.", "success");
+      }
+
       resetForm();
       hideForm();
       fetchGames();
@@ -281,7 +348,7 @@ function updateGame(id, game) {
 }
 
 function deleteGame(id) {
-  const confirmed = window.confirm(`Are you sure you want to delete game with ID ${id}?`);
+  const confirmed = window.confirm("Are you sure you want to delete this game?");
 
   if (!confirmed) {
     return;
@@ -293,7 +360,7 @@ function deleteGame(id) {
     url: `${GAMES_URL}/${id}`,
     method: "DELETE",
     success: function () {
-      showMessage(`Game with ID ${id} deleted successfully.`, "success");
+      showMessage("Game deleted successfully.", "success");
       fetchGames();
     },
     error: function (xhr, status, error) {
@@ -371,6 +438,14 @@ $refreshBtn.on("click", function () {
 
 $searchInput.on("input", function () {
   applyFilter($(this).val());
+});
+
+$yearIncreaseBtn.on("click", function () {
+  changeYearValue(1);
+});
+
+$yearDecreaseBtn.on("click", function () {
+  changeYearValue(-1);
 });
 
 window.startEdit = startEdit;

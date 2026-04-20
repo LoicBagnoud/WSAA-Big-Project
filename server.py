@@ -64,12 +64,18 @@ def find_boxcover_for_game(game_name, year_released=None):
         best_match = find_best_game_match(game_name, year_released)
 
         if best_match is None:
-            return "/images/not-found.png"
+            return {
+                "boxcover_url": "/images/not-found.png",
+                "warning": "No image found. Are you sure you've added the correct game? Check the game title."
+            }
 
         game_id = best_match.get("id")
 
         if not game_id:
-            return "/images/not-found.png"
+            return {
+                "boxcover_url": "/images/not-found.png",
+                "warning": "No image found. Are you sure you've added the correct game? Check the game title."
+            }
 
         url = "https://api.thegamesdb.net/v1/Games/Images"
         params = {
@@ -87,12 +93,18 @@ def find_boxcover_for_game(game_name, year_released=None):
             if image.get("type") == "boxart" and image.get("side") == "front":
                 filename = image.get("filename")
                 if filename:
-                    return base_url + filename
+                    return {
+                        "boxcover_url": base_url + filename,
+                        "warning": None
+                    }
 
     except Exception as e:
         print("Error finding box cover:", e)
 
-    return "/images/not-found.png"
+    return {
+        "boxcover_url": "/images/not-found.png",
+        "warning": "No image found. Are you sure you've added the correct game? Check the game title."
+    }
 
 
 # Get all games
@@ -120,11 +132,11 @@ def create_game():
 
         print("Incoming JSON:", request.json)
 
-        cover_url = find_boxcover_for_game(
+        cover_result = find_boxcover_for_game(
             request.json.get("name"),
             request.json.get("year_released")
         )
-        print("Cover URL:", cover_url)
+        print("Cover URL:", cover_result)
 
         game = {
             "name": request.json.get("name"),
@@ -132,11 +144,13 @@ def create_game():
             "year_released": request.json.get("year_released"),
             "developer": request.json.get("developer"),
             "platforms": request.json.get("platforms"),
-            "boxcover_url": cover_url
+            "boxcover_url": cover_result["boxcover_url"]
         }
         print("Game to save:", game)
 
         created_game = gamesDAO.create(game)
+        created_game["warning"] = cover_result["warning"]
+
         print("Created game:", created_game)
 
         return jsonify(created_game), 201

@@ -32,13 +32,33 @@
 
           <div class="form-group">
             <label for="year_released">Year Released</label>
-            <input
-              type="number"
-              id="year_released"
-              name="year_released"
-              placeholder="Enter release year"
-              required
-            />
+            <div class="number-input-wrapper">
+              <input
+                type="number"
+                id="year_released"
+                name="year_released"
+                placeholder="Enter release year"
+                required
+              />
+              <div class="number-spinner-controls">
+                <button
+                  type="button"
+                  class="spinner-btn spinner-up"
+                  id="yearIncreaseBtn"
+                  aria-label="Increase year"
+                >
+                  ▲
+                </button>
+                <button
+                  type="button"
+                  class="spinner-btn spinner-down"
+                  id="yearDecreaseBtn"
+                  aria-label="Decrease year"
+                >
+                  ▼
+                </button>
+              </div>
+            </div>
           </div>
 
           <div class="form-group">
@@ -109,9 +129,9 @@
     </div>
 
     <p class="footer-note">
-      Refresh reloads the latest list from the server. <br>
-      Search filters the currently loaded records. <br>
-      If no image exists for that game, make sure you added the game name correctly!
+      Refresh reloads the latest list from the server. <br />
+      Search filters the currently loaded records. <br />
+      If no image exists for that game, make sure you added the game name correctly as well as the year!
     </p>
   </div>
 
