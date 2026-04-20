@@ -2,18 +2,30 @@
 # Copied the format mainly from the DAO by Andrew Beatty.
 # Author: Loic Bagnoud
 
-import sqlite3
+import mysql.connector
+import dbconfig as cfg
 
 class GamesDAO:
-    connection = None
-    cursor = None
-    db_file = "games.db"
+    connection = ""
+    cursor = ""
+    host = ""
+    user = ""
+    password = ""
+    database = ""
 
     def __init__(self):
-        pass
+        self.host = cfg.mysql['host']
+        self.user = cfg.mysql['user']
+        self.password = cfg.mysql['password']
+        self.database = cfg.mysql['database']
 
     def getcursor(self):
-        self.connection = sqlite3.connect(self.db_file)
+        self.connection = mysql.connector.connect(
+            host=self.host,
+            user=self.user,
+            password=self.password,
+            database=self.database,
+        )
         self.cursor = self.connection.cursor()
         return self.cursor
 
@@ -23,7 +35,7 @@ class GamesDAO:
 
     def getAll(self):
         cursor = self.getcursor()
-        sql = "SELECT * FROM games"
+        sql = "select * from games"
         cursor.execute(sql)
         results = cursor.fetchall()
         returnArray = []
@@ -36,7 +48,7 @@ class GamesDAO:
 
     def findByID(self, id):
         cursor = self.getcursor()
-        sql = "SELECT * FROM games WHERE id = ?"
+        sql = "select * from games where id = %s"
         values = (id,)
 
         cursor.execute(sql, values)
@@ -50,10 +62,7 @@ class GamesDAO:
 
     def create(self, game):
         cursor = self.getcursor()
-        sql = """
-            INSERT INTO games (name, genre, year_released, developer, platforms, boxcover_url)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """
+        sql = "insert into games (name, genre, year_released, developer, platforms, boxcover_url) values (%s, %s, %s, %s, %s, %s)"
         values = (
             game.get("name"),
             game.get("genre"),
@@ -62,8 +71,8 @@ class GamesDAO:
             game.get("platforms"),
             game.get("boxcover_url")
         )
-
         cursor.execute(sql, values)
+
         self.connection.commit()
         newid = cursor.lastrowid
         game["id"] = newid
@@ -72,11 +81,7 @@ class GamesDAO:
 
     def update(self, id, game):
         cursor = self.getcursor()
-        sql = """
-            UPDATE games
-            SET name = ?, genre = ?, year_released = ?, developer = ?, platforms = ?, boxcover_url = ?
-            WHERE id = ?
-        """
+        sql = "update games set name = %s, genre = %s, year_released = %s, developer = %s, platforms = %s, boxcover_url = %s where id = %s "
         values = (
             game.get("name"),
             game.get("genre"),
@@ -86,14 +91,13 @@ class GamesDAO:
             game.get("boxcover_url"),
             id
         )
-
         cursor.execute(sql, values)
         self.connection.commit()
         self.closeAll()
 
     def delete(self, id):
         cursor = self.getcursor()
-        sql = "DELETE FROM games WHERE id = ?"
+        sql = "delete from games where id = %s"
         values = (id,)
 
         cursor.execute(sql, values)
@@ -103,12 +107,12 @@ class GamesDAO:
         print("delete done")
 
     def convertToDictionary(self, resultLine):
-        attkeys = ['id', 'name', 'genre', 'year_released', 'developer', 'platforms', 'boxcover_url']
+        attkeys = ['id', 'name', 'genre', 'year_released', 'developer', 'platforms','boxcover_url']
         game = {}
         currentkey = 0
         for attrib in resultLine:
             game[attkeys[currentkey]] = attrib
-            currentkey += 1
+            currentkey = currentkey + 1
         return game
 
 
