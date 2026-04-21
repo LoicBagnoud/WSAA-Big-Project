@@ -1,5 +1,5 @@
 # This is to create a specific Table for sqlite3
-# Author: ChatGPT
+# Author: ChatGPT and Myself for SQLlite Syntax
 
 import sqlite3
 
@@ -25,3 +25,4 @@ print("games table created successfully")
 
 # References:
 # ChatGPT - https://chatgpt.com/share/69cfc0bc-c5ec-8384-9482-04af249039a8
+# Sqllite Documentation - https://docs.python.org/3/library/sqlite3.html
