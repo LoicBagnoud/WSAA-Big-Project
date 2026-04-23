@@ -2,6 +2,15 @@
 
 # Game Database Web Application
 
+## Table of Contents
+- [Overview](#overview)
+- [What's currently possible](#whats-currently-possible)
+- [What was Used](#What-was-used)
+- [Some notes on the Project](#some-notes-on-the-project)
+- [References](#references)
+- [Project Structure](#project-structure)
+
+
 ## Overview
 This project is a web application that allows users to create, view, update, and delete video game records stored in a database. The application also supports displaying box cover images for each game and provides a simple browser-based interface for interacting with the data. 
 
@@ -23,7 +32,7 @@ The purpose of this project was to develop a full-stack web application that com
 
 ---
 
-## Technologies Used
+## What was Used
 ### Backend
 - Python
 - Flask
@@ -39,26 +48,6 @@ The purpose of this project was to develop a full-stack web application that com
 - PythonAnywhere
 - VS Code
 - Postman
-
----
-
-## Project Structure
-
-```Github unfortunately orders things by alphabetical order, so rather than switch things around into folders and break the code (given that it currently is pulling from the root), I will leave it as it and this map will outline the logic.
-
-root-depository/
-│
-├── server.py              # This contains the Flask application and the main API logic for getting the covers.
-├── gamesDAO.py            # This connects with the database and executes all our SQL commands on sqlite3
-├── games.db               # This is the SQLite database
-├── index.html             # Main front-end page
-├── styles.css             # Front-end page styling
-├── app.js                 # Front-end JavaScript logic
-├── README.md              # Project documentation
-└── images/
-    └── not-found.png      # Default image used when no box cover is found
-    └── background.jpg     # Background image that was used for the front-end
-
 
 ---
 
@@ -81,7 +70,7 @@ That would expand this project to be a replica of ThegamesDB which would go far 
 
 ---
 
-References: 
+## References: 
 
 - API, backend and web application constructions chats: https://chatgpt.com/share/69cd5c08-10c0-8384-87ea-192b926d634b
 
@@ -94,3 +83,21 @@ References:
 - Sqlite3 syntax and documentation: https://docs.python.org/3/library/sqlite3.html
 
 - "403" forbidden error when first attempting the API connection on pythonanywhere: https://help.pythonanywhere.com/pages/403ForbiddenError
+
+## Project Structure
+
+```Github unfortunately orders things by alphabetical order, so rather than switch things around into folders and break the code (given that it currently is pulling from the root), I will leave it as it and this map will outline the logic.
+
+root-depository/
+│
+├── server.py              # This contains the Flask application and the main API logic for getting the covers.
+├── gamesDAO.py            # This connects with the database and executes all our SQL commands on sqlite3
+├── games.db               # This is the SQLite database
+├── index.html             # Main front-end page
+├── styles.css             # Front-end page styling
+├── app.js                 # Front-end JavaScript logic
+├── requirements.txt       # Necessary modules that were used for this
+├── README.md              # Project documentation
+└── images/
+    └── not-found.png      # Default image used when no box cover is found
+    └── background.jpg     # Background image that was used for the front-end
