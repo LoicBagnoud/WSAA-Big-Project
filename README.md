@@ -18,6 +18,9 @@ The way this works is by an API call that gets sent to [theGamesDB](https://theg
 
 The purpose of this project was to develop a full-stack web application that combines backend development, database management, API handling, and frontend design.
 
+Final Project:
+https://sirktar.pythonanywhere.com/index.html
+
 ---
 
 ## What's currently possible
@@ -53,20 +56,25 @@ The purpose of this project was to develop a full-stack web application that com
 
 ## Some notes on the Project
 
-Throughout this project, AI was used to aid with the coding. The front-end was entirely written by ChatGPT and backend was written between myself and the AI.
+This project is meant to be hosted on sqlite3. To run it on your local machine, make sure to: 
+
+    1 - Run the init_db.py application first to that you have the database created
+    2 - Run server.py to host it on your local machine
+
+Throughout this project, AI was used to aid with the coding. The front-end was entirely written by ChatGPT and the backend was written between myself and the AI.
 
 Proper references will be provided to those chat logs so that one can inspect and investigate the vibe-coding process. 
 
-I understand that further could have gone into this, ranging from user authentication to limiting the amount of freedom one can take with what they can write. 
+I understand that further work could have gone into this, ranging from user authentication to limiting the amount of freedom one can take with what they can write. 
 
 The application assumes that the user will write the names correctly and use the database in a normal manner. Additional mechanisms could have been applied here to prevent user error, including but not limited to:
 
-- Creating additional tables for the developers and platforms to limit user choice and get better images.
+- Creating additional tables for the developers and platforms to limit user choice and get better and more accurate images.
 - Preventing duplicate games and having the server react to a duplication, prompting the user to choose another game.
 - Autocompleting the name field with what is already found within the ThegamesDB
 - And many others...
 
-That would expand this project to be a replica of ThegamesDB which would go far beyond the this small scope. 
+That would expand this project to be a replica of ThegamesDB which would go far beyond this small scope. 
 
 ---
 
