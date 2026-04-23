@@ -20,7 +20,7 @@ def search_game_by_name(game_name):
     response = requests.get(url, params=params)
     return response.json()
 
-# The second one here is to choose from the all of the results. 
+# The second one here is to choose from the all of the results.
 def find_best_game_match(game_name, year_released=None):
     data = search_game_by_name(game_name)
 
@@ -83,28 +83,38 @@ def find_boxcover_for_game(game_name, year_released=None):
             "games_id": game_id
         }
 
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=params, timeout=20)
         data = response.json()
+
+        print("IMAGES RESPONSE:", data)
 
         base_url = data.get("data", {}).get("base_url", {}).get("medium", "")
         images = data.get("data", {}).get("images", {}).get(str(game_id), [])
 
+        print("GAME ID:", game_id)
+        print("BASE URL:", base_url)
+        print("IMAGES:", images)
+
         for image in images:
             if image.get("type") == "boxart" and image.get("side") == "front":
                 filename = image.get("filename")
-                if filename:
+                if filename and base_url:
                     return {
                         "boxcover_url": base_url + filename,
                         "warning": None
                     }
 
+        return {
+            "boxcover_url": "/images/not-found.png",
+            "warning": "No box art found for that game."
+        }
+
     except Exception as e:
         print("Error finding box cover:", e)
-
-    return {
-        "boxcover_url": "/images/not-found.png",
-        "warning": "No image found. Are you sure you've added the correct game? Check the game title."
-    }
+        return {
+            "boxcover_url": "/images/not-found.png",
+            "warning": "No image found. Are you sure you've added the correct game? Check the game title."
+        }
 
 
 # Get all games
@@ -201,7 +211,7 @@ if __name__ == '__main__':
 # Reference:
 # https://chatgpt.com/share/69cd5c08-10c0-8384-87ea-192b926d634b
 # I had some doubts on why the LLM suggested both POST and PUT and not just POST. But they explained
-# that the difference lies in POST being to add a brand new game, whereas PUT is mainly to update it. 
-# While I understand that POST can be used for both, they suggested this way is cleaner, hence why I 
+# that the difference lies in POST being to add a brand new game, whereas PUT is mainly to update it.
+# While I understand that POST can be used for both, they suggested this way is cleaner, hence why I
 # followed it.
 # For the API Key - https://api.thegamesdb.net/

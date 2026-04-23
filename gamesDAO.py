@@ -7,7 +7,7 @@ import sqlite3
 class GamesDAO:
     connection = None
     cursor = None
-    db_file = "games.db"
+    db_file = "/home/sirktar/WSAA-Big-Project/games.db"
 
     def __init__(self):
         pass

@@ -1,11 +1,15 @@
 # This is to create a specific Table for sqlite3
 # Author: ChatGPT and Myself for SQLlite Syntax
 
+
+# We first import the module
 import sqlite3
 
+# We make our connection and we get our cursor
 connection = sqlite3.connect("games.db")
 cursor = connection.cursor()
 
+# This is our SQL Command to create the table
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS games (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -18,9 +22,11 @@ CREATE TABLE IF NOT EXISTS games (
 );
 """)
 
+# Execute the the table and close the cursor
 connection.commit()
 connection.close()
 
+# Small print to test on the console and terminal
 print("games table created successfully")
 
 # References:

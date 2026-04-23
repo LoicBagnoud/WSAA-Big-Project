@@ -1,9 +1,11 @@
 // This is the Javascript functions that allow the page to behave the way it does
 // Author: ChatGPT - Reference below
 
-const API_BASE_URL = "http://127.0.0.1:5000";
+const API_BASE_URL = "";
 const GAMES_URL = `${API_BASE_URL}/games`;
 const DEFAULT_BOX_ART = "images/not-found.png";
+const MIN_YEAR = 1950;
+const MAX_YEAR = new Date().getFullYear();
 
 let allGames = [];
 let isEditMode = false;
@@ -21,8 +23,6 @@ const $cancelBtn = $("#cancelBtn");
 const $refreshBtn = $("#refreshBtn");
 const $searchInput = $("#searchInput");
 const $yearReleasedInput = $("#year_released");
-const $yearIncreaseBtn = $("#yearIncreaseBtn");
-const $yearDecreaseBtn = $("#yearDecreaseBtn");
 
 function showMessage(text, type = "success") {
   $messageBox.text(text).removeClass("success error").addClass(type);
@@ -40,18 +40,28 @@ function hideForm() {
   $formCard.removeClass("active");
 }
 
+function populateYearDropdown() {
+  $yearReleasedInput.empty();
+  $yearReleasedInput.append('<option value="">Select a year</option>');
+
+  for (let year = MAX_YEAR; year >= MIN_YEAR; year -= 1) {
+    $yearReleasedInput.append(`<option value="${year}">${year}</option>`);
+  }
+}
+
 function resetForm() {
   $gameForm[0].reset();
   isEditMode = false;
   editingGameId = null;
   $formTitle.text("Add Game");
   $submitBtn.text("Save Game");
+  $yearReleasedInput.val("");
 }
 
 function populateForm(game) {
   $("#name").val(game.name ?? "");
   $("#genre").val(game.genre ?? "");
-  $("#year_released").val(game.year_released ?? "");
+  $("#year_released").val(String(game.year_released ?? ""));
   $("#developer").val(game.developer ?? "");
   $("#platforms").val(game.platforms ?? "");
 }
@@ -75,8 +85,8 @@ function validateGameData(game) {
     return "Genre is required.";
   }
 
-  if (!Number.isInteger(game.year_released)) {
-    return "Year Released must be an integer.";
+  if (!Number.isInteger(game.year_released) || game.year_released < MIN_YEAR || game.year_released > MAX_YEAR) {
+    return `Year Released must be between ${MIN_YEAR} and ${MAX_YEAR}.`;
   }
 
   if (!game.developer) {
@@ -88,12 +98,6 @@ function validateGameData(game) {
   }
 
   return null;
-}
-
-function changeYearValue(delta) {
-  const currentValue = Number($yearReleasedInput.val()) || 0;
-  $yearReleasedInput.val(currentValue + delta);
-  $yearReleasedInput.trigger("input");
 }
 
 function escapeHtml(value) {
@@ -440,20 +444,13 @@ $searchInput.on("input", function () {
   applyFilter($(this).val());
 });
 
-$yearIncreaseBtn.on("click", function () {
-  changeYearValue(1);
-});
-
-$yearDecreaseBtn.on("click", function () {
-  changeYearValue(-1);
-});
-
 window.startEdit = startEdit;
 window.deleteGame = deleteGame;
 
 $(document).ready(function () {
+  populateYearDropdown();
   fetchGames();
 });
 
 // References:
-// ChatGPT - https://chatgpt.com/share/69cfc0bc-c5ec-8384-9482-04af249039a8 
+// ChatGPT - https://chatgpt.com/share/69cfc0bc-c5ec-8384-9482-04af249039a8
