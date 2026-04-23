@@ -59,6 +59,14 @@ https://sirktar.pythonanywhere.com/index.html
 This project is meant to be hosted on sqlite3. To run it on your local machine, make sure to: 
 
     1 - Run the init_db.py application first to that you have the database created
+
+    3 - In the gamesDAO.py file, where it states the class, make sure that the db_file variable looks like this:
+        
+        **db_file = "games.db"** and not like this **db_file = "/home/sirktar/WSAA-Big-Project/games.db"**
+
+        The code on github is what was uploaded to pythonanywhere to it's searching up there. For your local
+        machine, make it search the games.db database you created with init_dp.py
+
     2 - Run server.py to host it on your local machine
 
 Throughout this project, AI was used to aid with the coding. The front-end was entirely written by ChatGPT and the backend was written between myself and the AI.
