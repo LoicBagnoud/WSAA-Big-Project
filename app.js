@@ -453,4 +453,4 @@ $(document).ready(function () {
 });
 
 // References:
-// ChatGPT - https://chatgpt.com/share/69cfc0bc-c5ec-8384-9482-04af249039a8
+// ChatGPT - https://chatgpt.com/share/69ea73d9-a55c-83eb-ad18-7332a4da104a

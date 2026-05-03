@@ -1,4 +1,4 @@
-# This is to create a specific Table for sqlite3
+# This is an application o create a specific Table for sqlite3
 # Author: ChatGPT and Myself for SQLlite Syntax
 
 
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS games (
 );
 """)
 
-# Execute the the table and close the cursor
+# We execute the the table and close the cursor
 connection.commit()
 connection.close()
 

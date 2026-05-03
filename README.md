@@ -5,10 +5,10 @@
 ## Table of Contents
 - [Overview](#overview)
 - [What's currently possible](#whats-currently-possible)
-- [What was Used](#What-was-used)
-- [Some notes on the Project](#some-notes-on-the-project)
+- [What was used](#What-was-used)
+- [Some notes on the project](#some-notes-on-the-project)
 - [References](#references)
-- [Project Structure](#project-structure)
+- [Project structure](#project-structure)
 
 
 ## Overview
@@ -35,7 +35,7 @@ https://sirktar.pythonanywhere.com/index.html
 
 ---
 
-## What was Used
+## What was used
 ### Backend
 - Python
 - Flask
@@ -64,7 +64,7 @@ This project is meant to be hosted on sqlite3. To run it on your local machine, 
         
         **db_file = "games.db"** and not like this **db_file = "/home/sirktar/WSAA-Big-Project/games.db"**
 
-        The code on github is what was uploaded to pythonanywhere to it's searching up there. For your local
+        The code on github is what was uploaded to pythonanywhere so it's searching up there. For your local
         machine, make it search the games.db database you created with init_dp.py
 
     2 - Run server.py to host it on your local machine
@@ -72,6 +72,8 @@ This project is meant to be hosted on sqlite3. To run it on your local machine, 
 Throughout this project, AI was used to aid with the coding. The front-end was entirely written by ChatGPT and the backend was written between myself and the AI.
 
 Proper references will be provided to those chat logs so that one can inspect and investigate the vibe-coding process. 
+
+**Note - Due to the extensive size of the logs, the first reference below won't direct the user to an accurate log. Rather an early     version. I've emailed those logs in a zip file so that you're able to skim through them.**        
 
 I understand that further work could have gone into this, ranging from user authentication to limiting the amount of freedom one can take with what they can write. 
 
@@ -88,13 +90,13 @@ That would expand this project to be a replica of ThegamesDB which would go far 
 
 ## References: 
 
-- API, backend and web application constructions chats: https://chatgpt.com/share/69cd5c08-10c0-8384-87ea-192b926d634b
+- API, backend and web application constructions chats: https://chatgpt.com/share/69cfc0bc-c5ec-8384-9482-04af249039a8 - REFER TO NOTE IN README
 
 - Main API that was used to get cover images: https://api.thegamesdb.net/
 
 - Styling inspiration: https://rawg.io/
 
-- Javascript, HTML and CSS code: https://chatgpt.com/share/69cfc0bc-c5ec-8384-9482-04af249039a8
+- Javascript, HTML and CSS code: https://chatgpt.com/share/69ea73d9-a55c-83eb-ad18-7332a4da104a
 
 - Sqlite3 syntax and documentation: https://docs.python.org/3/library/sqlite3.html
 

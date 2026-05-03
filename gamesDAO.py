@@ -2,8 +2,11 @@
 # Copied the format mainly from the DAO by Andrew Beatty.
 # Author: Loic Bagnoud
 
+# We import the sqlite3 module
 import sqlite3
 
+# We create our class of functions. It's important to note here that unlike MySQL
+# I'll need to reference the specific games.db file. 
 class GamesDAO:
     connection = None
     cursor = None
@@ -12,6 +15,8 @@ class GamesDAO:
     def __init__(self):
         pass
 
+    # This is our function to create the cursor itself and opens the database. 
+    # and to close the cursor. We'll later reuse both of these
     def getcursor(self):
         self.connection = sqlite3.connect(self.db_file)
         self.cursor = self.connection.cursor()
@@ -21,6 +26,8 @@ class GamesDAO:
         self.cursor.close()
         self.connection.close()
 
+
+    # Our first CRUD (Read). We get all the games from the database
     def getAll(self):
         cursor = self.getcursor()
         sql = "SELECT * FROM games"
@@ -34,6 +41,7 @@ class GamesDAO:
         self.closeAll()
         return returnArray
 
+    # This is just a more specific one that get's the game by the ID
     def findByID(self, id):
         cursor = self.getcursor()
         sql = "SELECT * FROM games WHERE id = ?"
@@ -48,6 +56,7 @@ class GamesDAO:
 
         return self.convertToDictionary(result)
 
+    # Our second CRUD (Create). Had to investigate the syntax for sqlite since it doesn't use %s like Mysql. It uses "?"
     def create(self, game):
         cursor = self.getcursor()
         sql = """
@@ -70,6 +79,7 @@ class GamesDAO:
         self.closeAll()
         return game
 
+    # Our third CRUD (Update)
     def update(self, id, game):
         cursor = self.getcursor()
         sql = """
@@ -91,6 +101,7 @@ class GamesDAO:
         self.connection.commit()
         self.closeAll()
 
+    # Our final CRUD (Delete)
     def delete(self, id):
         cursor = self.getcursor()
         sql = "DELETE FROM games WHERE id = ?"
@@ -102,6 +113,8 @@ class GamesDAO:
 
         print("delete done")
 
+    # This last function converts the keys into a dictionary so we can call them above with the Getall.
+    # This is mainly to make it a bit more readable and we do the getall above. Getall does call this function.
     def convertToDictionary(self, resultLine):
         attkeys = ['id', 'name', 'genre', 'year_released', 'developer', 'platforms', 'boxcover_url']
         game = {}
