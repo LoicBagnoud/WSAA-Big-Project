@@ -73,7 +73,7 @@ Throughout this project, AI was used to aid with the coding. The front-end was e
 
 Proper references will be provided to those chat logs so that one can inspect and investigate the vibe-coding process. 
 
-**Note - Due to the extensive size of the logs, the first reference below won't direct the user to an accurate log. Rather an early     version. I've emailed those logs in a zip file so that you're able to skim through them.**        
+**===> Note <=== - Due to the extensive size of the logs, the first reference below won't direct the user to an accurate log. Rather an early     version. I've emailed those logs in a zip file so that you're able to skim through them.**        
 
 I understand that further work could have gone into this, ranging from user authentication to limiting the amount of freedom one can take with what they can write. 
 
